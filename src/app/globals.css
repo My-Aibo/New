@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+body {
+  @apply bg-white text-black transition-colors duration-300;
+}
+
+html.dark body {
+  @apply bg-black text-white;
+}
+
+.text-dynamic {
+  @apply text-black;
+}
+
+html.dark .text-dynamic {
+  @apply text-white; /* Dark mode: text becomes white */
+}
+
+/* Hide Leaflet stuff */
+.leaflet-control-attribution,
+.leaflet-control-zoom,
+.leaflet-control-layers {
+  display: none;
+}
