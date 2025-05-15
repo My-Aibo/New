@@ -2,9 +2,9 @@
 
 import { PrivyProvider } from "@privy-io/react-auth";
 import { toSolanaWalletConnectors } from "@privy-io/react-auth/solana";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { ToastProvider } from "../../atoms/toast/toast-provider";
 
+// Configure Solana wallet connectors
 const solanaConnectors = toSolanaWalletConnectors({
   shouldAutoConnect: true,
 });
@@ -44,8 +44,9 @@ export default function AppWrapper({
         },
       }}
     >
-      <ToastContainer theme="dark" hideProgressBar icon={false} />
-      {children}
+      <ToastProvider>
+        {children}
+      </ToastProvider>
     </PrivyProvider>
   );
 }
