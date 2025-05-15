@@ -7,7 +7,8 @@ import {
   ChevronRight,
   CircleUserRound,
   LocateFixed,
-} from "lucide-react";
+} from "lucid  return (
+    <div className="space-y-6" onKeyDown={handleKeyDown} tabIndex={0}>{react";
 import {
   BundleAnalysisResponse,
   BundleDetails,
@@ -65,7 +66,7 @@ function BundleCard({
           <h3 className="text-lg font-semibold">Wallet Information</h3>
           <div className="grid gap-3">
             {Object.entries(bundle.wallet_info).map(
-              ([wallet, info]: [string, any]) => (
+              ([wallet, info]: [string, { tokens: number; token_percentage: number; sol: number; sol_percentage: number }]) => (
                 <div key={wallet} className="overflow-hidden">
                   <div className="p-4">
                     <div className="flex items-center gap-3">
@@ -120,6 +121,15 @@ export function BundleList({ bundles }: BundleListProps) {
   const bundleEntries = Object.entries(bundles || {});
   const totalPages = bundleEntries.length;
   const progress = ((currentPage + 1) / totalPages) * 100;
+  
+  // Handle keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowLeft" && currentPage > 0) {
+      setCurrentPage((prev) => prev - 1);
+    } else if (e.key === "ArrowRight" && currentPage < totalPages - 1) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
 
   // Sort bundles by total tokens
   const sortedBundleEntries = bundleEntries.sort(
@@ -134,12 +144,13 @@ export function BundleList({ bundles }: BundleListProps) {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(0, prev - 1))}
               disabled={currentPage === 0}
-              className="w-28 hover:bg-muted/50"
+              className="flex items-center justify-center w-28 hover:bg-muted/50 rounded-md px-3 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Previous page"
             >
               <ChevronLeft className="mr-2 size-4" />
               Previous
             </button>
-            <span className="flex items-center text-sm text-muted-foreground">
+            <span className="flex items-center text-sm text-muted-foreground font-medium">
               {currentPage + 1} of {totalPages}
             </span>
             <button
@@ -147,7 +158,8 @@ export function BundleList({ bundles }: BundleListProps) {
                 setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1))
               }
               disabled={currentPage >= totalPages - 1}
-              className="w-28 hover:bg-muted/50"
+              className="flex items-center justify-center w-28 hover:bg-muted/50 rounded-md px-3 py-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Next page"
             >
               Next
               <ChevronRight className="ml-2 size-4" />
@@ -162,12 +174,12 @@ export function BundleList({ bundles }: BundleListProps) {
         </div>
       )}
 
-      <button>
+      <div>
         {sortedBundleEntries.map(([address, bundle], index) => {
           if (index !== currentPage) return null;
           return <BundleCard bundle={bundle} index={index} key={address} />;
         })}
-      </button>
+      </div>
     </div>
   );
 }
